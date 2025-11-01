@@ -14,6 +14,7 @@
     * [Ruang Lingkup](#ruang-lingkup)
 * [Fitur Utama](#fitur-utama)
 * [Arsitektur Sistem](#arsitektur-sistem)
+* [Struktur Projek](#struktur-projek)
 * [Tumpukan Teknologi](#tumpukan-teknologi)
 * [Instalasi & Menjalankan Proyek](#instalasi--menjalankan-proyek)
     * [Prasyarat](#prasyarat)
@@ -84,6 +85,30 @@ Sistem ini menggunakan arsitektur **"One-Page Scroll Hybrid"**.
 
 1.  **Halaman Utama (`/`)**: Berfungsi sebagai *landing page* tunggal yang berisi beberapa bagian (Hero, About, Reviews, Contact) yang dapat di-scroll. Tautan seperti `#about-us` akan menggunakan *smooth-scroll* ke bagian tersebut.
 2.  **Halaman Fungsional Terpisah**: Halaman yang kompleks secara fungsional seperti `/menu`, `/login`, dan `/checkout` dijadikan halaman terpisah (rute Vue yang berbeda) untuk menjaga fokus pengguna dan mempermudah pengelolaan *state*.
+
+---
+
+## Struktur Projek
+
+├── public/ # Aset statis yang tidak diproses (misal: favicon.ico) 
+├── src/ 
+│ ├── assets/ # CSS global, font, dan gambar yang diproses 
+│ ├── components/ # Komponen Vue yang dapat digunakan kembali (misal: Button, Card) 
+│ ├── router/ # Konfigurasi Vue Router (index.js) 
+│ ├── views/ # Komponen Halaman (misal: HomeView.vue, MenuView.vue) 
+│ ├── App.vue # Komponen root/cangkang aplikasi 
+│ └── main.js # Titik masuk aplikasi (inisialisasi Vue) 
+├── .editorconfig # Konfigurasi konsistensi editor 
+├── .gitignore # File yang diabaikan oleh Git 
+├── index.html # Template HTML utama 
+├── package.json # Dependensi dan skrip proyek 
+├── vite.config.js # Konfigurasi Vite 
+└── README.md # Dokumentasi proyek (Anda sedang membacanya)
+
+* **`/src/views`**: Berisi komponen yang mewakili satu halaman penuh, seperti `HomeView.vue` atau `MenuView.vue`. Setiap rute utama akan menunjuk ke satu file di sini.
+* **`/src/components`**: Berisi komponen-komponen kecil yang dapat digunakan kembali di berbagai halaman, seperti `Navbar.vue`, `Footer.vue`, atau `MenuItemCard.vue`.
+* **`/src/router`**: Mengelola pemetaan URL ke komponen Tampilan (View) yang sesuai.
+* **`/src/assets`**: Menyimpan file pendukung seperti file CSS global (`main.css`) dan gambar.
 
 ---
 
