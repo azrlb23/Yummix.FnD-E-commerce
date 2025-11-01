@@ -21,6 +21,7 @@
     * [Instalasi Frontend (Client)](#instalasi-frontend-client)
     * [Instalasi Backend (Server)](#instalasi-backend-server)
 * [Roadmap](#roadmap)
+* [Alur Kerja Pengembangan (Development Workflow)](#alur-kerja-pengembangan-development-workflow)
 * [Kontak](#kontak)
 
 ---
@@ -212,8 +213,34 @@ Fitur-fitur berikut direncanakan untuk rilis mendatang (V2.0 dan seterusnya):
 
 ---
 
+## Alur Kerja Pengembangan (Development Workflow)
+
+Proyek ini menggunakan alur kerja Git sederhana untuk menjaga stabilitas kode.
+
+1.  **Branch `main`:** Branch ini dilindungi (*protected*) dan hanya berisi kode yang sudah stabil dan siap untuk rilis (produksi). Dilarang melakukan *commit* langsung ke `main`.
+2.  **Branch `develop`:** Ini adalah branch pengembangan utama. Semua fitur baru digabungkan ke sini terlebih dahulu.
+3.  **Branch Fitur (Feature Branches):**
+    * Saat mengerjakan fitur baru (misal: "Login" atau "Menu"), selalu buat branch baru dari `develop`:
+        ```bash
+        # Pindah ke branch develop dan pastikan sudah update
+        git checkout develop
+        git pull origin develop
+        
+        # Buat branch fitur baru
+        git checkout -b fitur/nama-fitur
+        ```
+    * Setelah Anda melakukan *commit* pada pekerjaan Anda, *push* branch baru tersebut ke remote (GitHub) untuk pertama kalinya untuk mempublikasikannya:
+        ```bash
+        # -u akan mengatur branch lokal Anda untuk melacak branch remote
+        git push -u origin fitur/nama-fitur
+        ```
+    * Terakhir, buka repositori di GitHub dan buat *Pull Request (PR)* dari branch `fitur/nama-fitur` Anda ke branch `develop` untuk ditinjau.
+
+---
+
 ## Kontak
 
 Nama Anda – [azrielalbian23.com](mailto:azrielalbian23.com)
 
 Link Proyek: [https://github.com/azrlb23/Yummix.FnD-E-commerce](https://github.com/username/yummix)
+
