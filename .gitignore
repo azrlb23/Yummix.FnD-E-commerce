@@ -1,0 +1,34 @@
+File ini SANGAT PENTING.
+
+Letakkan file ini di folder root proyek Vue Anda SEBELUM Anda meng-upload.
+
+Abaikan dependensi lokal
+
+/node_modules/
+
+Abaikan file build
+
+/dist/
+/target/
+
+Abaikan log
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+Abaikan file env lokal (yang berisi KUNCI API RAHASIA)
+
+.env.local
+.env.*.local
+
+Abaikan file cache/config editor
+
+.vscode/
+.idea/
+*.suo
+.ntvs
+*.njsproj
+*.sln
+*.sw?
