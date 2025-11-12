@@ -15,6 +15,8 @@
 * [Fitur Utama](#fitur-utama)
 * [Arsitektur Sistem](#arsitektur-sistem)
 * [Struktur Projek](#struktur-projek)
+* [Arsitektur Styling](#arsitektur-styling-css)
+* [Komponen Utama](#komponen-utama)
 * [Tumpukan Teknologi](#tumpukan-teknologi)
 * [Instalasi & Menjalankan Proyek](#instalasi--menjalankan-proyek)
     * [Prasyarat](#prasyarat)
@@ -23,7 +25,7 @@
 * [Roadmap](#roadmap)
 * [Alur Kerja Pengembangan (Development Workflow)](#alur-kerja-pengembangan-development-workflow)
 * [Kontak](#kontak)
-
+* [Catatan Pengembangan & Best Practice](#catatan-pengembangan--best-practice)
 ---
 
 ## Tentang Proyek
@@ -110,6 +112,60 @@ Sistem ini menggunakan arsitektur **"One-Page Scroll Hybrid"**.
 * **`/src/components`**: Berisi komponen-komponen kecil yang dapat digunakan kembali di berbagai halaman, seperti `Navbar.vue`, `Footer.vue`, atau `MenuItemCard.vue`.
 * **`/src/router`**: Mengelola pemetaan URL ke komponen Tampilan (View) yang sesuai.
 * **`/src/assets`**: Menyimpan file pendukung seperti file CSS global (`main.css`) dan gambar.
+
+---
+
+## Arsitektur Styling (CSS)
+
+Proyek ini menggunakan pendekatan CSS murni dengan Variabel CSS (Custom Properties) untuk arsitektur *styling* yang konsisten dan mudah dikelola.
+
+File `src/assets/main.css` berfungsi sebagai *stylesheet* global dan diimpor langsung ke `src/main.js`. File ini mendefinisikan:
+
+* **Palet Warna Global:** Semua warna utama (seperti `--primary-color`, `--text-dark`, `--bg-soft-orange`) didefinisikan dalam `:root` agar dapat digunakan kembali di komponen mana pun.
+* **Style Dasar:** Mengatur ulang (reset) *style* `body` dasar, termasuk `background-color` dan `font-family` global.
+* **Kelas Utilitas (Utility Classes):** Berisi *helper* yang sering digunakan seperti `.container` untuk membatasi lebar konten dan `.btn`, `.btn-primary`, `.btn-secondary` untuk *styling* tombol yang konsisten.
+
+---
+
+## Komponen Utama
+
+### Penanganan Aset (Asset Handling)
+
+Proyek ini menggunakan Vite, yang memiliki cara khusus untuk menangani aset statis seperti gambar dan font.
+
+* **Aset di dalam `src/` (Direkomendasikan):**
+    * Semua aset yang perlu diproses oleh *bundler* (seperti logo, ikon komponen) harus ditempatkan di dalam `src/assets/`.
+    * Untuk menggunakannya di dalam komponen Vue, impor aset tersebut di dalam blok `<script setup>` dan ikat (`v-bind` atau `:`) ke atribut `src`.
+    * Gunakan alias `@` (yang menunjuk ke `src/`) untuk path yang bersih.
+
+* **Aset di dalam `public/` (Jarang Digunakan):**
+    * Aset yang TIDAK PERLU diproses dan harus disalin apa adanya (seperti `favicon.ico` atau `robots.txt`) dapat ditempatkan di folder `public/`.
+    * Aset di sini dapat diakses menggunakan path absolut `/` dari *root*. Contoh: `/favicon.ico`.
+
+### Navbar (Header Navigasi)
+
+Komponen `Navbar.vue` menyediakan navigasi utama di seluruh aplikasi. Ia ditempatkan di `App.vue` agar selalu muncul di bagian atas setiap halaman.
+
+* **Tujuan:** Memungkinkan pengguna untuk menavigasi antar halaman utama (Home, Menu, About Us, Contact) dan menyediakan akses cepat ke keranjang belanja serta pendaftaran/login.
+* **Lokasi File:** `src/components/Navbar.vue`
+* **Fungsionalitas:**
+    * Menampilkan logo "YUMMIX" yang juga berfungsi sebagai tautan ke halaman utama.
+    * Tautan navigasi ke halaman Home, Menu, About Us, dan Contact.
+    * Ikon keranjang belanja.
+    * Tombol "Sign Up" untuk pendaftaran pengguna baru.
+* **Aset yang Diperlukan:** Pastikan file logo (misal: `logo.svg`) ditempatkan di `src/assets/images/logo.svg` agar ditampilkan dengan benar.
+
+
+### Hero Section
+
+Komponen `HeroSection.vue` adalah bagian utama yang dilihat pengguna saat pertama kali mengunjungi *landing page*.
+
+* **Tujuan:** Menampilkan *tagline* utama, deskripsi singkat, dan tombol *call-to-action* (CTA) untuk menarik pengguna agar menjelajahi menu.
+* **Lokasi File:** `src/components/HeroSection.vue`
+* **Layout:** Menggunakan layout Flexbox dua kolom:
+    * **Kolom Kiri:** Berisi *heading* (`<h1>`), paragraf deskripsi, dan dua tombol CTA ("Explore Menu" dan "Search").
+    * **Kolom Kanan:** Berisi gambar utama produk.
+* **Aset yang Diperlukan:** Membutuhkan gambar visual utama (misal: `hero-image.png`) yang ditempatkan di `src/assets/images/`.
 
 ---
 
@@ -237,6 +293,55 @@ Proyek ini menggunakan alur kerja Git sederhana untuk menjaga stabilitas kode.
     * Terakhir, buka repositori di GitHub dan buat *Pull Request (PR)* dari branch `fitur/nama-fitur` Anda ke branch `develop` untuk ditinjau.
 
 ---
+
+## Catatan Pengembangan & Best Practice
+
+Berikut adalah beberapa aturan penting yang harus diikuti selama pengembangan untuk menghindari error umum.
+
+### 1. Konsistensi Huruf (Case-Sensitivity)
+
+Meskipun sistem operasi seperti Windows bersifat *case-insensitive* (tidak membedakan `file.vue` dan `File.vue`), *bundler* (Vite) dan Git bersifat *case-sensitive*.
+
+Inkonsistensi dalam penamaan file dan path impor akan menyebabkan error saat *build* atau saat dijalankan di lingkungan produksi (seperti server Linux).
+
+**Aturan:** Selalu pastikan path di dalam pernyataan `import` Anda sama persis (termasuk huruf besar/kecil) dengan nama file dan folder di disk.
+
+> **Contoh:**
+>
+> Jika nama file Anda adalah `MyComponent.vue`:
+>
+> ```javascript
+> // JANGAN LAKUKAN INI (salah)
+> import MyComponent from '@/components/mycomponent.vue'
+>
+> // LAKUKAN INI (benar)
+> import MyComponent from '@/components/MyComponent.vue'
+> ```
+
+### Penanganan Aset (Asset Handling)
+
+Proyek ini menggunakan Vite, yang memiliki cara khusus untuk menangani aset statis seperti gambar dan font.
+
+* **Aset di dalam `src/` (Direkomendasikan):**
+    * Semua aset yang perlu diproses oleh *bundler* (seperti logo, ikon komponen) harus ditempatkan di dalam `src/assets/`.
+    * Untuk menggunakannya di dalam komponen Vue, impor aset tersebut di dalam blok `<script setup>` dan ikat (`v-bind` atau `:`) ke atribut `src`.
+    * Gunakan alias `@` (yang menunjuk ke `src/`) untuk path yang bersih.
+
+    **Contoh di `Navbar.vue`:**
+    ```vue
+    <script setup>
+    // 1. Impor gambar
+    import yummixLogo from '@/assets/images/logo.svg';
+    </script>
+    
+    <template>
+      <img :src="yummixLogo" alt="Yummix Logo">
+    </template>
+    ```
+
+* **Aset di dalam `public/` (Jarang Digunakan):**
+    * Aset yang TIDAK PERLU diproses dan harus disalin apa adanya (seperti `favicon.ico` atau `robots.txt`) dapat ditempatkan di folder `public/`.
+    * Aset di sini dapat diakses menggunakan path absolut `/` dari *root*. Contoh: `/favicon.ico`.
 
 ## Kontak
 
